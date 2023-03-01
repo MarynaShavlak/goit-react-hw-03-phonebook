@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { ContactsList, ContactItem, DeleteContactButton } from './Contacts.styled';
+import { ContactsList, ContactItem} from './Contacts.styled';
 import { renderIcons } from 'utils/renderIcons';
 import { iconSize } from 'constants';
+import { IconButton } from 'components/IconButton';
 
 export function Contacts({contacts, onDeleteContact}) {
   return (
@@ -13,15 +14,13 @@ export function Contacts({contacts, onDeleteContact}) {
           {renderIcons('contact', iconSize.md)}
           <span className='contact__name'>{name}: </span>
           <span className='contact__number'>{number}</span>
-          <DeleteContactButton
-            type='button'
-            className='deleteBtn'
+          <IconButton
             onClick={() => onDeleteContact(id)}
-            
+            aria-label = "Delete contact"
           >
             {renderIcons('delete', iconSize.sm)}
-          </DeleteContactButton>
-          
+          </IconButton>
+         
       </ContactItem>
       ))}
     </ContactsList>
