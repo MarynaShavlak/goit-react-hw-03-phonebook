@@ -1,31 +1,45 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { GlobalStyle } from "components/GlobalStyle";
 import { Container } from "./App.styled";
 import { Section } from "components/Section";
 import { ContactForm } from 'components/ContactForm';
 import { Contacts } from 'components/Contacts';
 import { Filter } from 'components/Filter';
 import { Notification } from 'components/Notification';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-// import { ToastContainer, toast } from 'react-toastify';
-//   import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import { Layout } from 'components/Layout';
 
 
 export class App extends Component {
   state = {
-    contacts: [ 
-    {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-    {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-    {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-    {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-  ],
+    contacts: [],
   filter: '',
   name: '',
   number: ''
   }
   
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    if (savedContacts !== null) {
+      const parsedContacts = JSON.parse(savedContacts);
+      return this.setState({ contacts: parsedContacts });
+     }
+  }
+
+
+
+  componentDidUpdate(_, prevState) {
+    const currentContacts = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (currentContacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(currentContacts));
+    }
+}
+
+
+
+
   addContact = (contact) => {
     let isExist =this.checkContactInBook(contact)
     if (isExist) {
@@ -47,19 +61,26 @@ export class App extends Component {
     let isNumberExist = this.state.contacts.some(el => el.number === contact.number);
     let isNameExist = this.state.contacts.some(el => el.name === contact.name);
     if (isNameExist && isNumberExist) {
-      NotificationManager.error(`Ooops, contact with name ${contact.name} and number ${contact.number} is already in your phonebook`);
-        // toast.error(`Ooops, contact with name ${contact.name} and number ${contact.number} is already in your phonebook`, {
-        // position: toast.POSITION.TOP_RIGHT
-    // }
-      // );
+        toast.error(`Ooops, contact with name ${contact.name} and number ${contact.number} is already in your phonebook`, {
+        position: toast.POSITION.TOP_RIGHT
+    }
+      );
       return isContactExist=true;
     }
     if (isNameExist) {
-            NotificationManager.error(`Ooops, contact with name ${contact.name} is already in your phonebook`);
-      return isContactExist=true;
+      toast.error(`Ooops, contact with name ${contact.name} is already in your phonebook`, {
+        position: toast.POSITION.TOP_RIGHT
+    }
+      );
+      return isContactExist = true;
+      
     }
     if (isNumberExist) {
-                  NotificationManager.error(`Ooops, contact with number ${contact.number} is already in your phonebook`);
+            toast.error(`Ooops, contact with number ${contact.number} is already in your phonebook`, {
+        position: toast.POSITION.TOP_RIGHT
+    }
+      );
+
       return isContactExist=true;
     }
     
@@ -87,9 +108,9 @@ export class App extends Component {
   render() {
     const { filter, contacts } = this.state;
     const filteredContacts = this.getFilteredContacts();
-    // const hasContactsInBook = filteredContacts.length !== 0;
     const hasContactsInBook = contacts.length !== 0;
     return (
+      <Layout>
       <Container>
         <Section title="Phonebook">
           <ContactForm onSubmit={this.addContact} />
@@ -107,10 +128,10 @@ export class App extends Component {
             (<Notification message="There are no contacts in your phonebook yet" />)
           }
         </Section>
-        <GlobalStyle />
-        {/* <ToastContainer /> */}
-       <NotificationContainer/>
+        <ToastContainer autoClose={3000 } />
       </Container>
+
+      </Layout>
       
     );
   }
