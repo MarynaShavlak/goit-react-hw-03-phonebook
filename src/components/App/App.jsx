@@ -12,7 +12,7 @@ import { Layout } from 'components/Layout';
 
 export class App extends Component {
   state = {
-    contacts: [],
+  contacts: [],
   filter: '',
   name: '',
   number: ''
@@ -61,24 +61,18 @@ export class App extends Component {
     let isNumberExist = this.state.contacts.some(el => el.number === contact.number);
     let isNameExist = this.state.contacts.some(el => el.name === contact.name);
     if (isNameExist && isNumberExist) {
-        toast.error(`Ooops, contact with name ${contact.name} and number ${contact.number} is already in your phonebook`, {
-        position: toast.POSITION.TOP_RIGHT
-    }
+        toast.error(`Ooops, contact with name ${contact.name} and number ${contact.number} is already in your phonebook`
       );
       return isContactExist=true;
     }
     if (isNameExist) {
-      toast.error(`Ooops, contact with name ${contact.name} is already in your phonebook`, {
-        position: toast.POSITION.TOP_RIGHT
-    }
+      toast.error(`Ooops, contact with name ${contact.name} is already in your phonebook`
       );
       return isContactExist = true;
       
     }
     if (isNumberExist) {
-            toast.error(`Ooops, contact with number ${contact.number} is already in your phonebook`, {
-        position: toast.POSITION.TOP_RIGHT
-    }
+            toast.error(`Ooops, contact with number ${contact.number} is already in your phonebook`
       );
 
       return isContactExist=true;
@@ -93,6 +87,12 @@ export class App extends Component {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId)}))
   }
+
+  // updateContact = (newContactInfo) => {
+  
+  // }
+
+
 
   changeFilter = (e) => {
    this.setState({filter: e.currentTarget.value})
@@ -113,7 +113,7 @@ export class App extends Component {
       <Layout>
       <Container>
         <Section title="Phonebook">
-          <ContactForm onSubmit={this.addContact} />
+          <ContactForm onSubmit={this.addContact} operationType ="Add contact" />
         </Section>
         <Section title="Contacts">
           {hasContactsInBook
@@ -128,7 +128,14 @@ export class App extends Component {
             (<Notification message="There are no contacts in your phonebook yet" />)
           }
         </Section>
-        <ToastContainer autoClose={3000 } />
+          <ToastContainer
+            position="top-right"
+            newestOnTop={false}
+            closeOnClick
+            pauseOnFocusLoss
+            pauseOnHover={false}
+            theme="colored"
+            autoClose={4000} />
       </Container>
 
       </Layout>

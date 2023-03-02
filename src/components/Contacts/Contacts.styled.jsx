@@ -17,12 +17,5 @@ export const ContactItem = styled.li`
   align-items: center;
   font-size: 30px;
   
-  .contact__name {
-    font-style: italic;
-   }
-
-   .contact__number {
-    flex-grow:1;
-  }
 `;
 
