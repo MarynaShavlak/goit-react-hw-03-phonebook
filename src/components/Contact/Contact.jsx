@@ -31,19 +31,19 @@ export class Contact extends Component {
   componentDidMount() {
     const { contact: {name, number } } = this.props;
     this.setState({ number: number, name: name });
-    console.log(name);
-    console.log(number);
+    // console.log(name);
+    // console.log(number);
 
 
   }
 
   componentDidUpdate(_, prevState) {
-    console.log(prevState.isContactEdited);
-    console.log(this.state.isContactEdited);
+    // console.log(prevState.isContactEdited);
+    // console.log(this.state.isContactEdited);
     if (prevState.isContactEdited !== this.state.isContactEdited) {
 
     if (prevState.name === this.state.name && prevState.number === this.state.number) {
-      console.log('same fields');
+      // console.log('same fields');
       return toast.error(`There are no changes. You didn't change neither contact name or phone number`);
      
     } 
@@ -52,11 +52,11 @@ export class Contact extends Component {
 
     const savedContacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(savedContacts);
-    console.log(parsedContacts);
+    // console.log(parsedContacts);
     const newName = this.state.name;
     const newNumber = this.state.number;
-    console.log(newName);
-    console.log(newNumber);
+    // console.log(newName);
+    // console.log(newNumber);
       const newContacts = parsedContacts.reduce((acc, el) => {
         if (el.name === newName) {
           const newEl = {
@@ -64,7 +64,7 @@ export class Contact extends Component {
             name: el.name,
             number: newNumber,
           }
-          console.log(newEl);
+          // console.log(newEl);
           acc.push(newEl)
           return acc;
         } else if (el.number === newNumber) {
@@ -73,7 +73,7 @@ export class Contact extends Component {
             name: newName,
             number: el.number,
           }
-          console.log(newEl);
+          // console.log(newEl);
           acc.push(newEl);
           
           return acc;
@@ -84,9 +84,9 @@ export class Contact extends Component {
         return acc;
       }, []);
 
-    console.log(newContacts);
+    // console.log(newContacts);
     if (newContacts !== parsedContacts) {
-     console.log('update localstorage');
+    //  console.log('update localstorage');
       localStorage.setItem('contacts', JSON.stringify(newContacts));
     }
     }
@@ -99,9 +99,9 @@ export class Contact extends Component {
   }
 
   editContact = ({name, number}) => {
-    console.log('we update contact');
-    console.log(name);
-    console.log(number);
+    // console.log('we update contact');
+    // console.log(name);
+    // console.log(number);
     this.setState({ isModalOpen: false, isContactEdited: true, name:name, number:number});
     
   }

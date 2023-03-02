@@ -13,11 +13,11 @@ export class ContactEditor extends Component {
   
 
   componentDidMount() {
-    console.log('fill the inputs');
+    // console.log('fill the inputs');
     const { name, number } = this.props;
     this.setState({ number: number, name: name });
-    console.log(name);
-    console.log(number)
+    // console.log(name);
+    // console.log(number)
   }
 
   handleChange = ({ target: { name, value } }) =>{
@@ -29,14 +29,14 @@ export class ContactEditor extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, number } = this.props;
-    console.log(name);
-    console.log(number);
-    console.log('SUBMIT EDITOR');
-    console.log(this.state.name);
-    console.log(this.state.number);
+    // console.log(name);
+    // console.log(number);
+    // console.log('SUBMIT EDITOR');
+    // console.log(this.state.name);
+    // console.log(this.state.number);
 
     if (name !== this.state.name && number !== this.state.number) {
-      console.log('ALL CHANGES');
+      // console.log('ALL CHANGES');
       return toast.error(`You cannot change both name and number. To make full change, delete this contact and create new with correct info.`);
      
     }
