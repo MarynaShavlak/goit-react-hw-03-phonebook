@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ContactsList, ContactItem } from './Contacts.styled';
+import { ContactsList, ContactItem } from './ContactList.styled';
 import { Contact } from 'components/Contact';
 
 
-export function Contacts({ contacts, ...otherProps }) {
+export function ContactList({ contacts, ...otherProps }) {
   return (
     <ContactsList>
       {contacts.map(contact => (
@@ -18,7 +18,7 @@ export function Contacts({ contacts, ...otherProps }) {
   );
 }
 
-Contacts.propTypes = {
+ContactList.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

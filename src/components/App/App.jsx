@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { Container } from "./App.styled";
 import { Section } from "components/Section";
 import { ContactForm } from 'components/ContactForm';
-import { Contacts } from 'components/Contacts';
+import { ContactList } from 'components/ContactList';
 import { Filter } from 'components/Filter';
 import { Notification } from 'components/Notification';
 import { ToastContainer, toast } from 'react-toastify';
@@ -14,8 +14,6 @@ export class App extends Component {
   state = {
   contacts: [],
   filter: '',
-  name: '',
-  number: ''
   }
   
   componentDidMount() {
@@ -88,11 +86,31 @@ export class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== contactId)}))
   }
 
-  // updateContact = (newContactInfo) => {
-  
-  // }
+ 
 
+  changeContact = (contact) => {
 
+    this.setState(prevState => ({
+      contacts: prevState.contacts.map(el => {
+      if (el.name === contact.name) {
+        const newEl = {
+          id: nanoid(),
+          name: el.name,
+          number: contact.number,
+        }
+        return newEl;
+      } else if (el.number === contact.number) {
+        const newEl = {
+          id: nanoid(),
+          name: contact.name,
+          number: el.number,
+        }
+        return newEl;
+      }
+      return el;
+    })
+    }))
+  }
 
   changeFilter = (e) => {
    this.setState({filter: e.currentTarget.value})
@@ -121,7 +139,7 @@ export class App extends Component {
             (
               <>
               <Filter value={filter} onChange={this.changeFilter} />
-              <Contacts contacts={filteredContacts} onDeleteContact={this.deleteContact}></Contacts>
+              <ContactList contacts={filteredContacts} onDeleteContact={this.deleteContact} onChangeContact={this.changeContact}></ContactList>
               </>
             )
             :
