@@ -8,17 +8,28 @@ import './ContactEditor.css';
 export class ContactEditor extends Component {
   state = {
     name: '',
-    number:'',
+    number: '',
+    contacts: [],
   }
   
 
   componentDidMount() {
-    // console.log('fill the inputs');
+  
+    const savedContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(savedContacts);
     const { name, number } = this.props;
-    this.setState({ number: number, name: name });
+    this.setState({ number: number, name: name, contacts: parsedContacts });
     // console.log(name);
     // console.log(number)
+
+    // console.log(this.state.contacts);
   }
+
+//   componentDidUpdate(prevProps, prevState) {
+//     console.log('didupdate');
+//     console.log('prev', prevProps);
+//     console.log('this',this.state);
+// }
 
   handleChange = ({ target: { name, value } }) =>{
     this.setState({
@@ -29,17 +40,40 @@ export class ContactEditor extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, number } = this.props;
-    // console.log(name);
-    // console.log(number);
+    const { contacts } = this.state;
+    // console.log('PROP', name);
+    // console.log('NUMBER',number);
     // console.log('SUBMIT EDITOR');
-    // console.log(this.state.name);
-    // console.log(this.state.number);
-
+    // console.log('THIS NAME',this.state.name);
+    // console.log('THIS NUMBER',this.state.number);
+    // console.log('THIS CONTACTS',this.state.contacts);
     if (name !== this.state.name && number !== this.state.number) {
       // console.log('ALL CHANGES');
       return toast.error(`You cannot change both name and number. To make full change, delete this contact and create new with correct info.`);
      
     }
+
+    const filteredContactsByName = contacts.filter(contact => contact.name !== name);
+    // console.log(filteredContactsByName);
+    const isNameExist = filteredContactsByName.some(contact => contact.name === this.state.name);
+
+    const filteredContactsByNumber = contacts.filter(contact => contact.number !== number);
+    // console.log(filteredContactsByNumber);
+    const isNumberExist = filteredContactsByNumber.some(contact => contact.number === this.state.number);
+    
+    // console.log(isNameExist);
+    if (isNameExist) {
+      return toast.info(`Contact with name ${this.state.name} is already exist. Please, write another name `);
+   }
+    if (isNumberExist) {
+      return toast.info(`Contact with number ${this.state.number} is already exist. Please, check number and write correct`);
+    }
+
+
+
+
+    // console.log(isNumberExist );
+    
 
     this.props.onEditContact(this.state);
 

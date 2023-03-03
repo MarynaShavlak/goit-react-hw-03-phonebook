@@ -40,68 +40,76 @@ export class Contact extends Component {
   componentDidUpdate(_, prevState) {
     // console.log(prevState.isContactEdited);
     // console.log(this.state.isContactEdited);
-    if (prevState.isContactEdited !== this.state.isContactEdited) {
 
-    if (prevState.name === this.state.name && prevState.number === this.state.number) {
-      // console.log('same fields');
-      return toast.error(`There are no changes. You didn't change neither contact name or phone number`);
-     
-    } 
-
-
-
-    const savedContacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(savedContacts);
-    // console.log(parsedContacts);
-    const newName = this.state.name;
-    const newNumber = this.state.number;
-    // console.log(newName);
-    // console.log(newNumber);
-      const newContacts = parsedContacts.reduce((acc, el) => {
-        if (el.name === newName) {
-          const newEl = {
-            id: el.id,
-            name: el.name,
-            number: newNumber,
-          }
-          // console.log(newEl);
-          acc.push(newEl)
-          return acc;
-        } else if (el.number === newNumber) {
-          const newEl = {
-            id: el.id,
-            name: newName,
-            number: el.number,
-          }
-          // console.log(newEl);
-          acc.push(newEl);
-          
-          return acc;
-        }
-
-
-        acc.push(el)
-        return acc;
-      }, []);
-
-    // console.log(newContacts);
-    if (newContacts !== parsedContacts) {
-    //  console.log('update localstorage');
-      localStorage.setItem('contacts', JSON.stringify(newContacts));
-    }
-    }
+    // console.log('prev iscontacteditted',prevState.isContactEdited);
+    // console.log('now iscontacteditted',this.state.isContactEdited);
     
+     if (prevState.isContactEdited !== this.state.isContactEdited) {
+          const savedContacts = localStorage.getItem('contacts');
+          const parsedContacts = JSON.parse(savedContacts);
+          // console.log(parsedContacts);
+          const newName = this.state.name;
+          const newNumber = this.state.number;
+          // console.log(newName);
+          // console.log(newNumber);
+ 
+        // if (prevState.name === this.state.name && prevState.number === this.state.number) {
+        //   // console.log('same fields');
+        //   return toast.error(`There are no changes. You didn't change neither contact name or phone number`);
+        //   } 
+
+        const newContacts = parsedContacts.reduce((acc, el) => {
+          if (el.name === newName) {
+            const newEl = {
+              id: el.id,
+              name: el.name,
+              number: newNumber,
+            }
+            // console.log(newEl);
+            acc.push(newEl)
+            return acc;
+          } else if (el.number === newNumber) {
+            const newEl = {
+              id: el.id,
+              name: newName,
+              number: el.number,
+            }
+            // console.log(newEl);
+            acc.push(newEl);
+            
+            return acc;
+          }
+
+
+          acc.push(el)
+          return acc;
+        }, []);
+
+        // console.log('new array of contacts', newContacts);
+        // console.log('from local',parsedContacts);
+        if (newContacts !== parsedContacts) {
+          // console.log('update localstorage');
+          localStorage.setItem('contacts', JSON.stringify(newContacts));
+        }
+    }
+
   }
 
   toggleModal = () => {
     const { isModalOpen } = this.state;
-    isModalOpen ? this.setState({ isModalOpen: false }) : this.setState({ isModalOpen: true })
+    isModalOpen ? this.setState({ isModalOpen: false }) : this.setState({ isModalOpen: true, isContactEdited:false })
   }
 
   editContact = ({name, number}) => {
     // console.log('we update contact');
     // console.log(name);
     // console.log(number);
+     if (name === this.state.name && number === this.state.number) {
+          // console.log('same fields');
+        toast.error(`There are no changes. You didn't change neither contact name or phone number`);
+       this.setState({ isModalOpen: false, isContactEdited: true,});
+       return;
+      } 
     this.setState({ isModalOpen: false, isContactEdited: true, name:name, number:number});
     
   }
